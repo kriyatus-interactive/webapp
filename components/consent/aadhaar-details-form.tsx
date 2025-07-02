@@ -1,81 +1,88 @@
-"use client";
+'use client'
 
-import React, { useState } from "react";
-import { Input } from "@/components/ui/input"; // shadcn/ui Input
-import { Button } from "@/components/ui/button"; // shadcn/ui Button
-import { uploadImage } from "@/utils/upload-image";
-import { getAadhaarData } from "@/utils/get-aadhaar-data";
-import { createClient } from "@/lib/supabase/client";
+import React, { useState } from "react"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { uploadImage } from "@/utils/upload-image"
+import { getAadhaarData } from "@/utils/get-aadhaar-data"
+import { createClient } from "@/lib/supabase/client"
 
 interface AadhaarDetailsFormProps {
   aadhar_num: string
-  setParentId: Function
+  setParentId: (id: string) => void
 }
 
-const AadhaarDetailsForm = (props: AadhaarDetailsFormProps) => {
-  const { aadhar_num, setParentId } = props;
-  const [frontImage, setFrontImage] = useState<File | null>(null);
-  const [backImage, setBackImage] = useState<File | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [statusMsg, setStatusMsg] = useState("upload");
+const AadhaarDetailsForm: React.FC<AadhaarDetailsFormProps> = ({
+  aadhar_num,
+  setParentId,
+}) => {
+  const [frontImage, setFrontImage] = useState<File | null>(null)
+  const [backImage, setBackImage] = useState<File | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [success, setSuccess] = useState(false)
+  const [statusMsg, setStatusMsg] = useState("Upload")
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setLoading(true);
-    setSuccess(false);
-    console.log("running");
-    
-
-    if (frontImage === null || backImage === null) return;
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setLoading(true)
+    setSuccess(false)
+    setStatusMsg("Uploading images...")
 
     try {
-      setStatusMsg('uploading...');
-      const supabase = createClient();
-      const frontUrl = await uploadImage(frontImage);
-      const backUrl = await uploadImage(backImage);
+      if (!frontImage || !backImage) throw new Error("Both images required")
 
-      console.log("uploaded", frontUrl, backUrl);
-      
-      setStatusMsg('extracting data...')
-      const aadhaarData = await getAadhaarData(frontUrl, backUrl);
+      const supabase = createClient()
 
-      console.log("aadhar data", aadhaarData);
-      
+      // Upload both images
+      const frontUrl = await uploadImage(frontImage)
+      const backUrl = await uploadImage(backImage)
+
+      if (!frontUrl || !backUrl) throw new Error("Image upload failed")
+
+      // Extract Aadhaar data
+      setStatusMsg("Extracting data...")
+      const aadhaarData = await getAadhaarData(frontUrl, backUrl)
+
+      if (!aadhaarData || !aadhaarData.name) {
+        throw new Error("Could not extract Aadhaar name")
+      }
+
       const payload = {
-        aadhar_num: aadhar_num,
+        aadhar_num,
         aadhar_front_img_url: frontUrl,
         aadhar_back_img_url: backUrl,
-        name: aadhaarData.name
+        name: aadhaarData.name,
       }
-      if (frontUrl && backUrl && aadhaarData !== null) {
-        setStatusMsg('creating user...');
-        const { data, error } = await supabase.from('parents').insert(payload).select('parent_id');
 
-        console.log("parent data", data);
-        
-        if (data !== null) {
-          setSuccess(true);
-          setFrontImage(null);
-          setBackImage(null);
-          setParentId(data[0].parent_id);
-        }else throw Error("user cannot be created");
+      // Insert into Supabase
+      setStatusMsg("Saving details...")
+      const { data, error } = await supabase
+        .from('parents')
+        .insert(payload)
+        .select('parent_id')
+        .single()
+
+      if (error || !data?.parent_id) {
+        throw new Error(error?.message || "Failed to save parent")
       }
-    } catch (error) {
-      console.log("an error", error);
-      
-      setSuccess(false);
+
+      // Done
+      setSuccess(true)
+      setParentId(data.parent_id)
+      setFrontImage(null)
+      setBackImage(null)
+      setStatusMsg("Completed")
+    } catch (err) {
+      console.error("Aadhaar Details Error:", err)
+      setSuccess(false)
+      setStatusMsg("Failed. Try again.")
     } finally {
-      setLoading(false);
-      setStatusMsg('completed');
+      setLoading(false)
     }
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="space-y-3"
-    >
+    <form onSubmit={handleSubmit} className="space-y-4">
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Aadhaar Front Image
@@ -87,6 +94,7 @@ const AadhaarDetailsForm = (props: AadhaarDetailsFormProps) => {
           disabled={loading}
         />
       </div>
+
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Aadhaar Back Image
@@ -98,20 +106,22 @@ const AadhaarDetailsForm = (props: AadhaarDetailsFormProps) => {
           disabled={loading}
         />
       </div>
+
       <Button
         type="submit"
         disabled={loading || !frontImage || !backImage}
         className="w-full"
       >
-        {statusMsg}
+        {loading ? statusMsg : "Submit Aadhaar Details"}
       </Button>
+
       {success && (
         <div className="mt-4 p-3 bg-green-100 text-green-800 rounded">
-          Aadhaar images uploaded successfully!
+          Aadhaar verified and parent registered successfully!
         </div>
       )}
     </form>
-  );
-};
+  )
+}
 
-export default AadhaarDetailsForm;
+export default AadhaarDetailsForm
