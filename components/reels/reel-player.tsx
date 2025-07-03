@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import useVideo from "@/hooks/useVideo"; // your custom hook
 import { Heart, MessageSquareText, Share2, Volume2, VolumeOff } from "lucide-react"; // icons
 
 interface ReelPlayerProps {
@@ -10,7 +9,6 @@ interface ReelPlayerProps {
 }
 
 const ReelPlayer: React.FC<ReelPlayerProps> = ({ reel_id, videoUrl }) => {
-  const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
   const [muted, setMuted] = useState(true);
 

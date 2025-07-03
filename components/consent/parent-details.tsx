@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import AadhaarVerifyForm from './aadhaar-verify-form'
 import AadhaarDetailsForm from './aadhaar-details-form'
 import ParentConsent from './parent-consent'
