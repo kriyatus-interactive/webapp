@@ -9,7 +9,6 @@ interface ReelPlayerProps {
 }
 
 const ReelPlayer: React.FC<ReelPlayerProps> = ({ reel_id, videoUrl }) => {
-  const [likeCount, setLikeCount] = useState(0);
   const [muted, setMuted] = useState(true);
 
   const handleClick = () => {
@@ -35,7 +34,7 @@ const ReelPlayer: React.FC<ReelPlayerProps> = ({ reel_id, videoUrl }) => {
         >
           <Heart size={24} />
           <span className="mt-1 text-sm">
-            {likeCount < 1000 ? likeCount : `${(likeCount / 1000).toFixed(1)}k`}
+            0
           </span>
         </button>
 

@@ -78,9 +78,9 @@ const ParentConsent: React.FC<ParentConsentProps> = ({
       if (upsertError) throw new Error(upsertError.message)
 
       setSuccess(true)
-    } catch (err: any) {
+    } catch (err) {
       console.error(err)
-      setError(err.message || 'Something went wrong')
+      setError('Something went wrong')
     } finally {
       setUploading(false)
     }

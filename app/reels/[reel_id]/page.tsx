@@ -31,6 +31,7 @@ export async function generateMetadata({ params }: ReelPageProps): Promise<Metad
     error = result.error;
   } catch (err) {
     error = err;
+    console.log("an error:", error);
   }
 
   // Fallback values
