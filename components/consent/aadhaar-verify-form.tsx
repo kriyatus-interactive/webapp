@@ -55,7 +55,7 @@ const AadhaarVerifyForm: React.FC<AadhaarVerifyFormProps> = ({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-3">
+    <form onSubmit={handleSubmit} className="w-full space-y-3">
       <CardDescription>
             Parent must provide Aadhaar verification and then consent for their child to use Kriyatus.
       </CardDescription>

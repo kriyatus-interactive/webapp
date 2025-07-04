@@ -77,9 +77,9 @@ const page = async ({ params }: ReelPageProps) => {
   }
 
   return (
-    <main className="w-screen h-screen flex sm:items-center sm:justify-center">
+    <div className="flex justify-center items-start sm:p-2">
       <ReelPlayer reel_id={reel_id} videoUrl={data.reel_url} />
-    </main>
+    </div>
   );
 };
 

@@ -16,8 +16,8 @@ const ReelPlayer: React.FC<ReelPlayerProps> = ({ reel_id, videoUrl }) => {
   }
 
   return (
-    <div key={reel_id} className="h-full sm:aspect-[9/16] relative overflow-hidden rounded-sm">
-        <video className="" src={videoUrl} autoPlay loop muted={muted}></video>
+    <div key={reel_id} className="h-screen sm:h-auto sm:max-w-sm aspect-[9/16] relative sm:rounded-md overflow-hidden">
+        <video className="bottom-0 top-0 left-0 right-0" src={videoUrl} autoPlay loop muted={muted}></video>
 
         {/* Mute button */}
         <button
@@ -30,7 +30,7 @@ const ReelPlayer: React.FC<ReelPlayerProps> = ({ reel_id, videoUrl }) => {
         {/* Like button */}
         <button
         onClick={handleClick}
-          className={`absolute bottom-52 right-4 flex flex-col items-center transform -translate-y-1/2 text-white`}
+          className={`absolute bottom-52 right-4 flex flex-col items-center transform -translate-y-1/2 text-gray-400`}
         >
           <Heart size={24} />
           <span className="mt-1 text-sm">
@@ -41,7 +41,7 @@ const ReelPlayer: React.FC<ReelPlayerProps> = ({ reel_id, videoUrl }) => {
         {/* Comment button */}
         <button
         onClick={handleClick}
-          className={`absolute bottom-32 right-4 flex flex-col items-center transform -translate-y-1/2 text-white`}
+          className={`absolute bottom-32 right-4 flex flex-col items-center transform -translate-y-1/2 text-gray-400`}
         >
           <MessageSquareText size={24} />
           <span className="mt-1 text-sm">
@@ -52,7 +52,7 @@ const ReelPlayer: React.FC<ReelPlayerProps> = ({ reel_id, videoUrl }) => {
         {/* Share button */}
         <button
          onClick={handleClick}
-          className={`absolute bottom-24 right-4 flex flex-col items-center transform -translate-y-1/2 text-white`}
+          className={`absolute bottom-24 right-4 flex flex-col items-center transform -translate-y-1/2 text-gray-400`}
         >
           <Share2 size={24} />
         </button>

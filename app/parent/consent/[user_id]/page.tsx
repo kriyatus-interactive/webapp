@@ -43,7 +43,7 @@ const page = async ({ params }: ParentConsentProps) => {
 
   if (userRecord.is_aadhar_verified && consentRecord) {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-50 px-4">
+    <div className="flex items-center justify-center px-4">
       <div className="max-w-md w-full bg-white rounded-lg shadow-md p-8 text-center">
         <svg
           className="mx-auto h-12 w-12 text-green-500"
@@ -69,12 +69,14 @@ const page = async ({ params }: ParentConsentProps) => {
   const hasGivenConsentBefore = !!consentRecord
 
   return (
+    <div className='flex justify-center sm:items-center items-start sm:py-4'>
     <ParentDetails
       child_id={user_id}
       hasGivenConsentBefore={hasGivenConsentBefore}
       previousIsBiological={consentRecord?.is_biological_parent}
       previousGuardianCertUrl={consentRecord?.guardian_certificate_img_url}
-    />
+      />
+      </div>
   )
 }
 

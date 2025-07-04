@@ -31,8 +31,8 @@ const ParentDetails = ({
   const [verified, setVerified] = useState(false)
 
   return (
-    <div className="flex flex-col gap-6 sm:mx-96 mx-1 my-4">
-      <Card>
+    <div className="w-screen sm:max-w-screen-sm md:max-w-screen-md xs:max-w-xs">
+      <Card className='shadow-transparent border-0 sm:shadow sm:border'>
         <CardHeader>
           <CardTitle className="text-2xl text-center">Parent Consent</CardTitle>
         </CardHeader>

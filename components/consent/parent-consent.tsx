@@ -87,7 +87,7 @@ const ParentConsent: React.FC<ParentConsentProps> = ({
   }
 
   return (
-    <div className="space-y-6">
+    <div className="w-full space-y-6">
       {/* Relationship selection */}
       <div>
         <label className="block text-sm font-medium text-gray-800 mb-2">
@@ -151,7 +151,11 @@ const ParentConsent: React.FC<ParentConsentProps> = ({
         <Button
           variant="outline"
           onClick={() => handleConsent(false)}
-          disabled={uploading || success}
+          disabled={
+            !relationship ||
+            (relationship === 'guardian' && !previousGuardianCertUrl && !guardianCert) ||
+            uploading || success
+          }
         >
           {'I Do Not Consent'}
         </Button>
