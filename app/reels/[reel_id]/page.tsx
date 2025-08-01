@@ -1,4 +1,3 @@
-// app/(your-route)/page.tsx
 import ReelPlayer from '@/components/reels/reel-player';
 import { createClient } from '@/lib/supabase/server';
 import { Metadata } from 'next';
@@ -39,10 +38,10 @@ export async function generateMetadata({ params }: ReelPageProps): Promise<Metad
   const fallbackImage = `${defaultUrl}/opengraph-image.png`;
 
   return {
-    title: "Discover My Unique Solution to This Challeng",
+    title: "Discover My Unique Solution to This Challenge",
     description: data?.description || fallbackDescription,
     openGraph: {
-      title: "Discover My Unique Solution to This Challeng",
+      title: "Discover My Unique Solution to This Challenge",
       description: data?.description || fallbackDescription,
       images: [
         data?.thumbnail_url || fallbackImage,
@@ -52,7 +51,7 @@ export async function generateMetadata({ params }: ReelPageProps): Promise<Metad
     },
     twitter: {
       card: 'summary_large_image',
-      title: "Discover My Unique Solution to This Challeng",
+      title: "Discover My Unique Solution to This Challenge",
       description: data?.description || fallbackDescription,
       images: [data?.thumbnail_url || fallbackImage],
     },
@@ -64,7 +63,7 @@ const page = async ({ params }: ReelPageProps) => {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from('challenge_videos')
-    .select('reel_url')
+    .select('reel_url, username, avatar_url')
     .eq('submit_id', reel_id)
     .maybeSingle();
 
@@ -77,9 +76,7 @@ const page = async ({ params }: ReelPageProps) => {
   }
 
   return (
-    <div className="flex justify-center items-start sm:p-2">
-      <ReelPlayer reel_id={reel_id} videoUrl={data.reel_url} />
-    </div>
+      <ReelPlayer reel_id={reel_id} videoUrl={data.reel_url} userName={data.username} userAvatar={data.avatar_url} />
   );
 };
 

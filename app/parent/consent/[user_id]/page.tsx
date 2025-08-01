@@ -43,7 +43,7 @@ const page = async ({ params }: ParentConsentProps) => {
 
   if (userRecord.is_aadhar_verified && consentRecord) {
   return (
-    <div className="flex items-center justify-center px-4">
+    <div className="flex items-center justify-center h-screen px-4">
       <div className="max-w-md w-full bg-white rounded-lg shadow-md p-8 text-center">
         <svg
           className="mx-auto h-12 w-12 text-green-500"

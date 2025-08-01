@@ -1,67 +1,116 @@
 "use client";
 
-import React, { useState } from "react";
-import { Heart, MessageSquareText, Share2, Volume2, VolumeOff } from "lucide-react"; // icons
+import React, { useState, useRef } from "react";
+import {
+  Heart,
+  MessageSquareText,
+  Share2,
+  Volume2,
+  VolumeOff,
+} from "lucide-react";
 
 interface ReelPlayerProps {
   reel_id: string;
   videoUrl: string;
+  userAvatar: string;
+  userName: string;
 }
 
-const ReelPlayer: React.FC<ReelPlayerProps> = ({ reel_id, videoUrl }) => {
+const ReelPlayer: React.FC<ReelPlayerProps> = ({
+  reel_id,
+  videoUrl,
+  userAvatar,
+  userName,
+}) => {
   const [muted, setMuted] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const videoEl = useRef<HTMLVideoElement>(null);
 
-  const handleClick = () => {
-    window.alert('Install the Kriyatus App to interact with video');
-  }
+  const handleClickAction = () => {
+    window.alert("Install the Kriyatus App to interact with video");
+  };
+
+  const togglePlayPause = () => {
+    const video = videoEl.current;
+    if (!video) return;
+    if (video.paused) {
+      video.play();
+      setIsPlaying(true);
+    } else {
+      video.pause();
+      setIsPlaying(false);
+    }
+  };
 
   return (
-    <div key={reel_id} className="h-screen sm:h-auto sm:max-w-sm aspect-[9/16] relative sm:rounded-md overflow-hidden">
-        <video className="bottom-0 top-0 left-0 right-0" src={videoUrl} autoPlay loop muted={muted}></video>
+    <div key={reel_id} className="flex justify-center items-center">
+      {/* container as before */}
+      <div
+        className="relative bg-black
+                      w-screen h-screen
+                      sm:aspect-[9/16] sm:max-h-screen sm:max-w-[450px]"
+        onClick={togglePlayPause}
+      >
+        <video
+          ref={videoEl}
+          src={videoUrl}
+          autoPlay
+          loop
+          muted={muted}
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+        />
 
-        {/* Mute button */}
+        {/* mute button */}
         <button
-         onClick={() => setMuted(m => !m)}
-          className={`absolute top-8 right-4 flex flex-col items-center transform -translate-y-1/2 text-white`}
+          onClick={(e) => {
+            e.stopPropagation();
+            setMuted((m) => !m);
+          }}
+          className="absolute top-6 right-4 z-20 p-2 bg-black bg-opacity-50 rounded-full text-white"
         >
           {muted ? <VolumeOff size={24} /> : <Volume2 size={24} />}
         </button>
 
-        {/* Like button */}
-        <button
-        onClick={handleClick}
-          className={`absolute bottom-52 right-4 flex flex-col items-center transform -translate-y-1/2 text-gray-400`}
-        >
-          <Heart size={24} />
-          <span className="mt-1 text-sm">
-            0
-          </span>
-        </button>
-
-        {/* Comment button */}
-        <button
-        onClick={handleClick}
-          className={`absolute bottom-32 right-4 flex flex-col items-center transform -translate-y-1/2 text-gray-400`}
-        >
-          <MessageSquareText size={24} />
-          <span className="mt-1 text-sm">
-            45
-          </span>
-        </button>
-
-        {/* Share button */}
-        <button
-         onClick={handleClick}
-          className={`absolute bottom-24 right-4 flex flex-col items-center transform -translate-y-1/2 text-gray-400`}
-        >
-          <Share2 size={24} />
-        </button>
-
-        {/* Avatar & username placeholders */}
-        <div className="absolute bottom-10 left-4 flex items-center gap-2 text-white">
-          <div className="w-10 h-10 bg-gray-600 rounded-full" />
-          <p className="font-semibold text-sm">@username</p>
+        {/* action icons */}
+        <div className="absolute right-4 bottom-28 flex flex-col items-center space-y-6 z-20 text-white">
+          <button onClick={(e) => { e.stopPropagation(); handleClickAction(); }} className="flex flex-col items-center">
+            <Heart size={32} /><span className="text-xs mt-1">Like</span>
+          </button>
+          <button onClick={(e) => { e.stopPropagation(); handleClickAction(); }} className="flex flex-col items-center">
+            <MessageSquareText size={32} /><span className="text-xs mt-1">Comment</span>
+          </button>
+          <button onClick={(e) => { e.stopPropagation(); handleClickAction(); }} className="flex flex-col items-center">
+            <Share2 size={32} /><span className="text-xs mt-1">Share</span>
+          </button>
         </div>
+
+        {/* user info */}
+        <div className="absolute bottom-6 left-4 z-20 flex items-center space-x-3 text-white">
+          <img
+            src={userAvatar}
+            alt={`${userName} avatar`}
+            className="w-12 h-12 rounded-full border-2 border-white"
+          />
+          <p className="font-semibold text-base">@{userName}</p>
+        </div>
+
+        {/* Optional overlay icon to show play/pause state */}
+        {!isPlaying && (
+          <div className="absolute inset-0 flex justify-center items-center z-20">
+            <div className="bg-black bg-opacity-50 p-4 rounded-full">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-12 w-12 text-white"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+              </svg>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
