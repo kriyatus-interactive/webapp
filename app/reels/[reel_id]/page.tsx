@@ -4,8 +4,8 @@ import { Metadata } from 'next';
 import { redirect, RedirectType } from 'next/navigation';
 import React from 'react';
 
-const defaultUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
+const defaultUrl = process.env.NEXT_PUBLIC_BASE_URL
+  ? `https://${process.env.NEXT_PUBLIC_BASE_URL}`
   : "http://localhost:3000";
 
 interface ReelPageProps {

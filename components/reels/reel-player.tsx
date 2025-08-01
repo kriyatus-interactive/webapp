@@ -87,11 +87,13 @@ const ReelPlayer: React.FC<ReelPlayerProps> = ({
 
         {/* user info */}
         <div className="absolute bottom-6 left-4 z-20 flex items-center space-x-3 text-white">
-          <img
-            src={userAvatar}
-            alt={`${userName} avatar`}
-            className="w-12 h-12 rounded-full border-2 border-white"
-          />
+          <picture>
+            <img
+              src={userAvatar}
+              alt={`${userName} avatar`}
+              className="w-12 h-12 rounded-full border-2 border-white"
+            />
+          </picture>
           <p className="font-semibold text-base">@{userName}</p>
         </div>
 
